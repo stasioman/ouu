@@ -1,0 +1,209 @@
+backend:
+  name: github
+  repo: stasioman/olga-www
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+site_url: https://stasioman.github.io/ouu/
+
+collections:
+  - name: settings
+    label: Site Settings
+    files:
+      - label: Site Settings
+        name: site
+        file: src/data/site.json
+        fields:
+          - label: Robots
+            name: robots
+            widget: object
+            fields:
+              - { label: Allow search indexing, name: index, widget: boolean, default: false }
+              - { label: Allow follow links, name: nofollow, widget: boolean, default: true }
+              - { label: Robots Title, name: title, widget: string }
+
+          - { label: Base URL, name: baseUrl, widget: string, hint: "Base path for the site, e.g. /ouu/" }
+          - { label: Brand, name: brand, widget: string }
+          - { label: Site Title, name: title, widget: string }
+          - { label: Meta Description, name: description, widget: text }
+          - { label: Email, name: email, widget: string }
+          - { label: Phone, name: phone, widget: string }
+
+          - label: Hero
+            name: hero
+            widget: object
+            fields:
+              - { label: Eyebrow, name: eyebrow, widget: string }
+              - { label: Hero Image, name: image, widget: image, choose_url: false }
+              - { label: Hero Image Small, name: imageSmall, widget: image, choose_url: false }
+              - { label: Hero Title, name: title, widget: string }
+              - { label: Hero Accent, name: titleAccent, widget: string }
+              - { label: Hero Year, name: titleYear, widget: string }
+              - { label: Hero Subtitle, name: subtitle, widget: text }
+              - { label: Hero Status, name: status, widget: string }
+              - { label: Hero Meta, name: statusMeta, widget: string }
+              - { label: Scroll Label, name: scroll, widget: string }
+
+          - label: About
+            name: about
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: About Title, name: title, widget: string }
+              - { label: About Intro, name: intro, widget: string }
+              - { label: About Role, name: role, widget: string }
+              - { label: About Bio, name: bio, widget: text }
+              - { label: About Secondary Text, name: bioSecondary, widget: text }
+              - label: Socials
+                name: socials
+                widget: list
+                fields:
+                  - { label: Label, name: label, widget: string }
+                  - { label: URL, name: url, widget: string }
+
+          - label: Contact
+            name: contact
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Contact Email, name: button, widget: string }
+              - { label: Contact Text, name: description, widget: text }
+              - label: Socials
+                name: socials
+                widget: list
+                fields:
+                  - { label: Label, name: label, widget: string }
+                  - { label: URL, name: url, widget: string }
+
+          - label: Navigation
+            name: nav
+            widget: list
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: href, widget: string }
+              - { label: Class, name: className, widget: string, required: false }
+
+          - label: Resume
+            name: resume
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+              - label: Items
+                name: items
+                widget: list
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Meta, name: meta, widget: string }
+                  - { label: Copy, name: copy, widget: text }
+
+          - label: Skills
+            name: skills
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+              - label: Columns
+                name: columns
+                widget: list
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - label: Items
+                    name: items
+                    widget: list
+                    field: { label: Item, name: item, widget: string }
+
+          - label: Work
+            name: work
+            widget: object
+            hint: "Kicker and heading of the Work section. The projects themselves live in the Portfolio collection."
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+
+          - label: Craft
+            name: craft
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Copy, name: copy, widget: text }
+              - label: List
+                name: list
+                widget: list
+                field: { label: Item, name: item, widget: string }
+
+          - label: Process
+            name: process
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+              - label: Steps
+                name: steps
+                widget: list
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Copy, name: copy, widget: text }
+
+  - name: portfolio
+    label: Portfolio
+    label_singular: Project
+    description: >-
+      Portfolio case studies. Each entry gets its own page at /portfolio/<slug>/
+      and appears in the Work section on the homepage. The file name becomes the
+      URL slug.
+    folder: src/content/portfolio
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    sortable_fields: [order, year, title]
+    view_filters:
+      - { label: "Featured only", field: featured, pattern: true }
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Category, name: category, widget: string, hint: "e.g. Mobile App, Web App, Branding" }
+      - { label: Year, name: year, widget: number, value_type: int, min: 2000, max: 2100 }
+      - { label: Client, name: client, widget: string, required: false }
+      - { label: Role, name: role, widget: string, required: false, hint: "e.g. UX/UI Designer" }
+      - label: Description
+        name: description
+        widget: text
+        hint: "Short summary shown on the homepage card and under the title of the case page."
+      - label: Tags
+        name: tags
+        widget: list
+        required: false
+        field: { label: Tag, name: tag, widget: string, required: false }
+      - label: Cover Image
+        name: cover
+        widget: image
+        required: false
+        choose_url: false
+        hint: "Shown on the homepage card (16:9 crop) and at the top of the case page."
+      - label: Gallery
+        name: gallery
+        widget: list
+        required: false
+        hint: "Extra images for the gallery at the end of the case page."
+        field: { label: Image, name: image, widget: image, required: false, choose_url: false }
+      - label: External Link
+        name: link
+        widget: string
+        required: false
+        hint: "Optional — link to a live project, Behance case, etc."
+      - { label: Featured, name: featured, widget: boolean, default: false, required: false }
+      - label: Order
+        name: order
+        widget: number
+        value_type: int
+        required: false
+        hint: "Lower numbers are listed first in the Work section."
+      - label: Case Study
+        name: body
+        widget: markdown
+        hint: "The full case study. Markdown: headings (##), lists, images."
