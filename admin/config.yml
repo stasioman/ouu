@@ -1,0 +1,430 @@
+backend:
+  name: github
+  repo: stasioman/olga-www
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+site_url: https://stasioman.github.io/ouu/
+
+collections:
+  - name: settings
+    label: Site Settings
+    files:
+      - label: Site Settings
+        name: site
+        file: src/data/site.json
+        fields:
+          - label: Robots
+            name: robots
+            widget: object
+            fields:
+              - { label: Allow search indexing, name: index, widget: boolean, default: false }
+              - { label: Allow follow links, name: nofollow, widget: boolean, default: true }
+              - { label: Robots Title, name: title, widget: string }
+
+          - { label: Base URL, name: baseUrl, widget: string, hint: "Base path for the site, e.g. /ouu/" }
+          - { label: Brand, name: brand, widget: string }
+          - { label: Site Title, name: title, widget: string }
+          - { label: Meta Description, name: description, widget: text }
+          - { label: Email, name: email, widget: string }
+          - { label: Phone, name: phone, widget: string }
+
+          - label: Hero
+            name: hero
+            widget: object
+            fields:
+              - { label: Eyebrow, name: eyebrow, widget: string }
+              - { label: Hero Image, name: image, widget: image, choose_url: false }
+              - { label: Hero Image Small, name: imageSmall, widget: image, choose_url: false }
+              - { label: Hero Title, name: title, widget: string }
+              - { label: Hero Accent, name: titleAccent, widget: string }
+              - { label: Hero Year, name: titleYear, widget: string }
+              - { label: Hero Subtitle, name: subtitle, widget: text }
+              - { label: Hero Status, name: status, widget: string }
+              - { label: Hero Meta, name: statusMeta, widget: string }
+              - { label: Scroll Label, name: scroll, widget: string }
+
+          - label: About
+            name: about
+            widget: object
+            fields:
+              - { label: About Title, name: title, widget: string }
+              - { label: About Intro, name: intro, widget: string }
+              - { label: About Role, name: role, widget: string }
+              - { label: About Bio, name: bio, widget: text }
+              - { label: About Secondary Text, name: bioSecondary, widget: text }
+              - label: Socials
+                name: socials
+                widget: list
+                fields:
+                  - { label: Label, name: label, widget: string }
+                  - { label: URL, name: url, widget: string }
+
+          - label: Contact
+            name: contact
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Contact Email, name: button, widget: string }
+              - { label: Contact Text, name: description, widget: text }
+              - label: Socials
+                name: socials
+                widget: list
+                fields:
+                  - { label: Label, name: label, widget: string }
+                  - { label: URL, name: url, widget: string }
+
+          - label: Navigation
+            name: nav
+            widget: list
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: href, widget: string }
+              - { label: Class, name: className, widget: string, required: false }
+
+          - label: Resume
+            name: resume
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+              - label: Items
+                name: items
+                widget: list
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Meta, name: meta, widget: string }
+                  - { label: Copy, name: copy, widget: text }
+
+          - label: Skills
+            name: skills
+            widget: object
+            fields:
+              - label: Columns
+                name: columns
+                widget: list
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - label: Items
+                    name: items
+                    widget: list
+                    field: { label: Item, name: item, widget: string }
+
+          - label: Work
+            name: work
+            widget: object
+            hint: "Heading of the Work section. The projects themselves live in the Portfolio collection."
+            fields:
+              - { label: Title, name: title, widget: string }
+
+          - label: Craft
+            name: craft
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Copy, name: copy, widget: text }
+              - label: List
+                name: list
+                widget: list
+                field: { label: Item, name: item, widget: string }
+
+          - label: Process
+            name: process
+            widget: object
+            fields:
+              - { label: Title, name: title, widget: string }
+              - label: Steps
+                name: steps
+                widget: list
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Copy, name: copy, widget: text }
+
+  - name: portfolio
+    label: Portfolio
+    label_singular: Project
+    description: >-
+      Portfolio case studies. Each entry gets its own page at /portfolio/<slug>/
+      and appears in the Work section on the homepage. The file name becomes the
+      URL slug.
+    folder: src/content/portfolio
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    sortable_fields: [order, year, title]
+    view_filters:
+      - { label: "Featured only", field: featured, pattern: true }
+    fields:
+      - { label: Title, name: title, widget: string, hint: "e.g. Elternpost — Familien-Aufgaben-App" }
+      - { label: Hero Headline, name: headline, widget: string, required: false, hint: "Catchy hero headline, e.g. 'Alles Wichtige bleibt sichtbar!'" }
+      - { label: Watermark (Ghost Title), name: ghostTitle, widget: string, required: false, hint: "Atmospheric watermark word behind the hero header (e.g. 'Elternpost'). Falls back to client or title if empty." }
+      - { label: Category, name: category, widget: string, hint: "e.g. Mobile App, Web App, Branding" }
+      - { label: Year, name: year, widget: number, value_type: int, min: 2000, max: 2100 }
+      - { label: Client, name: client, widget: string, required: false }
+      - { label: Role, name: role, widget: string, required: false, hint: "Role in Projektdetails rail, e.g. 'Produktdesigner' or 'UX/UI Designer'" }
+      - { label: Timeline / Duration, name: timeline, widget: string, required: false, hint: "Zeitleiste in Projektdetails rail, e.g. '4 Monate'" }
+      - { label: Methods & Focus, name: methods, widget: string, required: false, hint: "Methoden in Projektdetails rail, e.g. 'Recherche, Synthese, Produktstrategie, Prototyping, Usability-Tests'" }
+      - { label: Deliverables, name: deliverables, widget: string, required: false, hint: "Projektergebnisse in Projektdetails rail, e.g. 'Eine App, die aus einem Foto oder einem Satz eine sichtbare Aufgabe macht.'" }
+      - label: Description
+        name: description
+        widget: text
+        hint: "Short summary shown on the homepage card and as the lead paragraph in the case hero."
+      - label: Tags
+        name: tags
+        widget: list
+        required: false
+        field: { label: Tag, name: tag, widget: string, required: false }
+      - label: Cover Image
+        name: cover
+        widget: image
+        required: false
+        choose_url: false
+        hint: "Homepage card image and main hero visual at the top of the case page."
+      - { label: Hide Hero Cover Image, name: hideHeroCover, widget: boolean, default: false, required: false, hint: "Check this to hide the cover image inside the case study header." }
+      - label: Gallery
+        name: gallery
+        widget: list
+        required: false
+        hint: "Extra images for the gallery at the end of the case page."
+        field: { label: Image, name: image, widget: image, required: false, choose_url: false }
+      - label: External Link
+        name: link
+        widget: string
+        required: false
+        hint: "Optional — link to a live project, Figma prototype, Behance case, etc."
+      - { label: Featured, name: featured, widget: boolean, default: false, required: false }
+      - label: Order
+        name: order
+        widget: number
+        value_type: int
+        required: false
+        hint: "Lower numbers are listed first in the Work section."
+
+      - label: Section 01 — Das Problem
+        name: sec01
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "01", required: false }
+          - { label: Title, name: title, widget: string, default: "Das Problem", required: false }
+          - { label: Text, name: body, widget: text, required: false }
+
+      - label: Section 02 — Interviews & Umfrage
+        name: sec02
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "02", required: false }
+          - { label: Title, name: title, widget: string, default: "Interviews / Umfrage", required: false }
+          - { label: Lead Text, name: lead, widget: text, required: false }
+          - { label: Sample Tag, name: sampleTag, widget: string, default: "n = 15", required: false }
+          - { label: Insights Title, name: insightsTitle, widget: string, default: "Wichtigste Erkenntnisse", required: false }
+          - label: Insights List
+            name: insights
+            widget: list
+            required: false
+            field: { label: Insight, name: item, widget: string }
+          - label: Stat Card
+            name: stats
+            widget: object
+            required: false
+            fields:
+              - { label: Number, name: number, widget: string }
+              - { label: Text, name: text, widget: text }
+          - label: Quotes
+            name: quotes
+            widget: list
+            required: false
+            field: { label: Quote, name: quote, widget: string }
+          - { label: Dark Callout Banner, name: callout, widget: text, required: false }
+
+      - label: Persona
+        name: persona
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Persona Photo, name: photo, widget: image, choose_url: false, required: false }
+          - { label: Badge / Pill, name: pill, widget: string, default: "Persona", required: false }
+          - { label: Name, name: name, widget: string, required: false }
+          - { label: Bio, name: bio, widget: text, required: false }
+          - { label: Quote, name: quote, widget: string, required: false }
+          - label: Pain Points
+            name: painPoints
+            widget: list
+            required: false
+            field: { label: Pain Point, name: item, widget: string }
+          - label: Needs
+            name: needs
+            widget: list
+            required: false
+            field: { label: Need, name: item, widget: string }
+          - { label: Callout Question, name: callout, widget: text, required: false }
+
+      - label: Section 03 — Wettbewerbsumfeld
+        name: sec03
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "03", required: false }
+          - { label: Title, name: title, widget: string, default: "Wettbewerbsumfeld", required: false }
+          - label: Competitor Items
+            name: items
+            widget: list
+            required: false
+            fields:
+              - { label: Competitor Name, name: title, widget: string }
+              - { label: Description, name: desc, widget: text }
+              - { label: Subtext, name: subtext, widget: text, required: false }
+          - { label: Dark Callout Card, name: callout, widget: text, required: false }
+
+      - label: Section 04 — Prozess & Wendepunkte
+        name: sec04
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "04", required: false }
+          - { label: Title, name: title, widget: string, default: "Prozess & Wendepunkte", required: false }
+          - { label: Lead Text, name: lead, widget: text, required: false }
+          - label: Process Steps (Phases)
+            name: steps
+            widget: list
+            required: false
+            fields:
+              - { label: Step Number, name: num, widget: string }
+              - { label: Step Name, name: name, widget: string }
+              - label: Bullet Points
+                name: bullets
+                widget: list
+                field: { label: Bullet, name: item, widget: string }
+          - label: Pivots / Wendepunkte
+            name: pivots
+            widget: list
+            required: false
+            fields:
+              - { label: Pivot Title, name: title, widget: string }
+              - { label: Pivot Text, name: text, widget: text }
+
+      - label: Section 05 — Vom Lo-Fi zum Mid-Fi
+        name: sec05
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "05", required: false }
+          - { label: Title, name: title, widget: string, default: "Vom Lo-Fi zum Mid-Fi", required: false }
+          - { label: Lead Question, name: leadQuestion, widget: string, required: false }
+          - { label: Lead Text, name: leadText, widget: text, required: false }
+          - { label: Scroll Hint Text, name: scrollHint, widget: string, default: "Horizontal scrollen", required: false }
+          - { label: Fullwidth Flow Image, name: image, widget: image, choose_url: false, required: false }
+          - { label: Image Alt Text, name: imageAlt, widget: string, required: false }
+
+      - label: Section 06 — Design System
+        name: sec06
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "06", required: false }
+          - { label: Title, name: title, widget: string, default: "Design System", required: false }
+          - { label: Principle Label, name: principleLabel, widget: string, default: "Leitprinzip", required: false }
+          - { label: Principle Text, name: principleText, widget: string, required: false }
+          - { label: Design System Image, name: image, widget: image, choose_url: false, required: false }
+          - { label: Image Alt Text, name: imageAlt, widget: string, required: false }
+
+      - label: Section 07 — Mid - Fi
+        name: sec07
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "07", required: false }
+          - { label: Title, name: title, widget: string, default: "Mid - Fi", required: false }
+          - { label: Lead Text, name: lead, widget: text, required: false }
+          - { label: Prototype Image, name: image, widget: image, choose_url: false, required: false }
+          - { label: Image Alt Text, name: imageAlt, widget: string, required: false }
+
+      - label: Section 07b — Usability-Test
+        name: sec07_test
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "07", required: false }
+          - { label: Title, name: title, widget: string, default: "Usability-Test", required: false }
+          - { label: Goal Label, name: goalLabel, widget: string, default: "Ziel", required: false }
+          - { label: Goal Text, name: goalText, widget: text, required: false }
+          - { label: Method Text, name: methodText, widget: string, required: false }
+          - label: Test Tasks
+            name: tasks
+            widget: list
+            required: false
+            field: { label: Task, name: item, widget: string }
+          - label: Focus Areas
+            name: focusAreas
+            widget: list
+            required: false
+            field: { label: Focus Area, name: item, widget: string }
+
+      - label: Section 08 — Verbesserungen & Erkenntnisse
+        name: sec08
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "08", required: false }
+          - { label: Title, name: title, widget: string, default: "Verbesserung der Nutzererfahrung durch Erkenntnisse zur Benutzerfreundlichkeit", required: false }
+          - { label: Lead Text, name: lead, widget: string, default: "Jede Änderung geht auf eine konkrete Beobachtung aus dem Usability-Test zurück.", required: false }
+          - label: Decision Cards (Phones & Findings)
+            name: items
+            widget: list
+            required: false
+            fields:
+              - { label: Phone Mockup Image, name: phone, widget: image, choose_url: false, required: false }
+              - { label: Phone Mockup Alt Text, name: phoneAlt, widget: string, required: false }
+              - { label: Card Title, name: title, widget: string }
+              - { label: Card Text, name: text, widget: text }
+              - { label: Dark Card Theme, name: dark, widget: boolean, default: false, required: false }
+
+      - label: Section 09 — Erfolg definieren
+        name: sec09
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Badge, name: badge, widget: string, default: "09", required: false }
+          - { label: Title, name: title, widget: string, default: "Erfolg definieren", required: false }
+          - { label: Lead Paragraph 1, name: lead1, widget: text, required: false }
+          - { label: Lead Paragraph 2, name: lead2, widget: text, required: false }
+          - { label: Subheading, name: subheading, widget: string, default: "Bleibt die App im Alltag?", required: false }
+          - label: Left Metrics Text
+            name: metricsText
+            widget: list
+            required: false
+            fields:
+              - { label: Metric Title, name: title, widget: string }
+              - { label: Metric Description, name: text, widget: text }
+          - label: KPI Cards
+            name: kpiCards
+            widget: list
+            required: false
+            fields:
+              - { label: Tag / Badge, name: tag, widget: string, default: "Verbesserung" }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Target Value, name: val, widget: string }
+              - { label: Description, name: text, widget: text }
+
+      - label: Extra Markdown Content
+        name: body
+        widget: markdown
+        required: false
+        hint: "Optional extra markdown content rendered at the bottom of the case study."
